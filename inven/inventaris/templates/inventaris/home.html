@@ -1,0 +1,19 @@
+{% extends 'inventaris/base.html'%}
+{% load user_tags %}
+
+{% block title %}
+Home
+{% endblock title %}
+{% block content %}
+{% if request.user|has_group:"admin" %}
+<div class="card-body">
+    Sistem Manajemen Invetaris RSKG
+    Selamat Datang Di Panel Admin Sistem Manajemen Invetaris RSKG Ny RA Habibie
+</div>
+{% else %}
+<div class="card-body">
+    Sistem Manajemen Invetaris RSKG
+    Selamat Datang Di Panel Sistem Manajemen Invetaris RSKG Ny RA Habibie disini anda telah masuk sebagai user
+</div>
+{% endif %}
+{% endblock content %}

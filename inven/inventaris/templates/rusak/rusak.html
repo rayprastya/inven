@@ -1,0 +1,56 @@
+{% extends 'inventaris/base.html'%}
+{% block title %}
+Tabel Barang Rusak
+{% endblock title %}
+{% block content %}
+<div class="card-body">
+    <table id="pinjamtb" class="table table-striped table-bordered"  style="width:100%">
+        <thead>
+            <tr>
+                <th>Kode Barang</th>
+                <th>Merk Barang</th>
+                <th>Product</th>
+                <th>
+                    <a href="{% url 'rusak-insert' %}" class="btn btn-outline-success">
+                        <i class="fas fa-plus"></i> Tambah Barang
+                    </a>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for i in rusak %}
+        
+            <tr>
+                <td>{{i.codebrg_rsk}}</td>
+                <td>{{i.merkbrg_rsk}}</td>
+                <td>{{i.barang_rsk}}</td>
+                <td>
+                    <a href="{% url 'rusak-update' i.id %}" class="btn text-secondary px-0">
+                        <i class="far fa-edit fa-lg"></i>
+                    </a>
+                    <form action="{% url 'rusak-delete' i.id %}" method="post" class="d-inline">
+                        {% csrf_token %}
+                        <button type="submit" class="btn">
+                            <i class="far fa-trash-alt fa-lg text-danger float-right"></i>
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock content %}
+
+{% block js %} 
+<script>
+    $(document).ready(function() {
+    $('#pinjamtb').DataTable({     
+      "aLengthMenu": [[3, 5, 10, 25, -1], [3, 5, 10, 25, "All"]],
+        "iDisplayLength": 3
+       } 
+    );
+} );
+</script>
+{% endblock js %}
