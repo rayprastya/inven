@@ -85,20 +85,21 @@ WSGI_APPLICATION = 'inven.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'heroku_fcdb90d8ba45f76',
-        'USER': 'b6c55403267524',
-        'PASSWORD': 'b53a88af',
-        'HOST': 'us-cdbr-east-03.cleardb.com',
-        'PORT': '3306',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#         'NAME': 'heroku_fcdb90d8ba45f76',
+#         'USER': 'b6c55403267524',
+#         'PASSWORD': 'b53a88af',
+#         'HOST': 'us-cdbr-east-03.cleardb.com',
+#         'PORT': '3306',
         'OPTIONS': {
             'skip-ssl',
        },
     }
 }
-# import dj_database_url
-# db_from_env = dj_database_url.config(conn_max_age=600)
-# DATABASES['default'].update(db_from_env)
+import dj_database_url
+db_from_env = dj_database_url.config(conn_max_age=600)
+DATABASES['default'].update(db_from_env)
 
 
 # Password validation
