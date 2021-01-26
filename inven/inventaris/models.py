@@ -10,12 +10,35 @@ from io import BytesIO
 from django.core.files import File
 from django import forms
 from random import randint
-
+from django.contrib.auth.models import User
+from inventaris.templatetags.user_tags import has_group
 
 # Create your models here.
+def nomor():
+    x = 1234567890999
+    return int(x)
 
+class AuthUser(models.Model):
+    password = models.CharField(max_length=128)
+    last_login = models.DateTimeField(blank=True, null=True)
+    is_superuser = models.IntegerField()
+    username = models.CharField(unique=True, max_length=150)
+    first_name = models.CharField(max_length=150)
+    last_name = models.CharField(max_length=150)
+    email = models.CharField(max_length=254)
+    is_staff = models.IntegerField()
+    is_active = models.IntegerField()
+    date_joined = models.DateTimeField()
+
+    def __str__(self):
+        return str(self.username)
+
+    class Meta:
+        managed = False
+        db_table = 'auth_user'
 
 class Barang(models.Model):
+    x = 1234567890987
     name = models.CharField(max_length=200, blank=True, null=True)
     code = models.ForeignKey(
         'Code', models.DO_NOTHING, blank=True, null=True)
@@ -23,6 +46,9 @@ class Barang(models.Model):
         'Merk', models.DO_NOTHING, db_column='merk', blank=True, null=True)
     date_created = models.DateTimeField(auto_now_add=True)
     barcode = models.ImageField(upload_to='static/images/', blank=True)
+    barcodenum = models.IntegerField()
+    stok = models.IntegerField()
+    status = models.CharField(default='aktif',max_length=200, blank=True, null=True)
 
     def randomNum(self, n):
         range_start = 10**(n-1)
@@ -30,11 +56,13 @@ class Barang(models.Model):
         return randint(range_start, range_end)
 
     def save(self, *args, **kwargs):
+        x = nomor()
         EAN = barcode.get_barcode_class('ean13')
-        ean = EAN(f'{self.randomNum(13)}', writer=ImageWriter())
+        ean = EAN(f'{x}', writer=ImageWriter())
         buffer = BytesIO()
         ean.write(buffer)
         self.barcode.save(f'{self.name}.png', File(buffer), save=False)
+        self.barcodenum = x
         return super().save(*args, **kwargs)
 
     def __str__(self):
@@ -43,8 +71,7 @@ class Barang(models.Model):
     class Meta:
         managed = False
         db_table = 'inventaris_barang'
-
-
+        
 class Code(models.Model):
     code = models.BigIntegerField(blank=True, null=True)
     nama_code = models.CharField(max_length=200, blank=True, null=True)
@@ -70,7 +97,9 @@ class Merk(models.Model):
 
 
 class Pinjam(models.Model):
-    nama_pj = models.CharField(max_length=200, blank=True, null=True)
+
+    nama_pj = models.ForeignKey(
+        AuthUser, models.DO_NOTHING, db_column='nama_pj')
     code_pj = models.ForeignKey(
         Code, models.DO_NOTHING, db_column='code_pj')
     merk_pj = models.ForeignKey(
@@ -79,7 +108,7 @@ class Pinjam(models.Model):
         Barang, models.DO_NOTHING, db_column='barang_pj', blank=True, null=True)
     tgl_pinjam = models.CharField(max_length=35)
     tgl_balikin = models.CharField(max_length=35)
-    date_created = models.DateTimeField()
+    date_created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         managed = False
@@ -170,24 +199,6 @@ class AuthPermission(models.Model):
         managed = False
         db_table = 'auth_permission'
         unique_together = (('content_type', 'codename'),)
-
-
-class AuthUser(models.Model):
-    password = models.CharField(max_length=128)
-    last_login = models.DateTimeField(blank=True, null=True)
-    is_superuser = models.IntegerField()
-    username = models.CharField(unique=True, max_length=150)
-    first_name = models.CharField(max_length=150)
-    last_name = models.CharField(max_length=150)
-    email = models.CharField(max_length=254)
-    is_staff = models.IntegerField()
-    is_active = models.IntegerField()
-    date_joined = models.DateTimeField()
-
-    class Meta:
-        managed = False
-        db_table = 'auth_user'
-
 
 class AuthUserGroups(models.Model):
     user = models.ForeignKey(AuthUser, models.DO_NOTHING)

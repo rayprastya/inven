@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
+from django.contrib.sessions.backends.db import SessionStore
 # Create your views here.
 from django.contrib.auth.models import Group
 from .models import *
@@ -20,12 +21,14 @@ def loginUser(request):
         if request.method == "POST":
             username_inp = request.POST.get('username', False)
             password_inp = request.POST.get('password', False)
-
+            # iduser = AuthUser.objects.raw('SELECT id FROM auth_user WHERE username = %s', [username_inp])
             user = authenticate(request, username=username_inp,
-                                password=password_inp)
+                                password=password_inp,
+                                )
 
             if user is not None:
                 login(request, user)
+                request.session['username'] = username_inp
                 return redirect('../home')
 
             else:
@@ -48,6 +51,7 @@ def my_view(request):
 
 
 def logoutUser(request):
+    request.session.flush()
     logout(request)
     if request.method == "POST":
         if request.POST["logout"] == "Submit":
@@ -55,7 +59,7 @@ def logoutUser(request):
 
             return redirect('../login')
 
-    return render(request, 'login/login.html')
+    return redirect('../login')
 
 
 @login_required(login_url='login')
@@ -99,7 +103,8 @@ def barang_delete(request, id):
 # @allowed_users(allowed_roles=['admin'])
 @login_required(login_url='login')
 def home(request):
-    return render(request, 'inventaris/home.html')
+    context={"username" : request.session['username']}
+    return render(request, 'inventaris/home.html', context)
 
 
 @login_required(login_url='login')
@@ -111,12 +116,12 @@ def registerPage(request):
     if request.method == 'POST':
         # form = UserCreationForm()
 
-        form = UserCreationForm(request.POST)
+        form = CreateUserForm(request.POST)
         if form.is_valid():
             form.save()
             return redirect('../home')
     else:
-        form = UserCreationForm()
+        form = CreateUserForm()
         # context = {}
     return render(request, 'login/register.html', {'form': form})
 

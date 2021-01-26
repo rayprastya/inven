@@ -1,5 +1,6 @@
 {% extends 'inventaris/base.html'%}
 {% load crispy_forms_tags %}
+{% load user_tags %}
 
 {% block title %}
 Form Peminjaman Barang
@@ -8,7 +9,7 @@ Form Peminjaman Barang
 {% block content %}
 <form action="" method="post" autocomplete="off">
     {% csrf_token %}
-    {{form.nama_pj|as_crispy_field}}
+    <input type="hidden" class="form-control" id="{{form.nama_pj}}" value="{{ user.username }}">
     <div class="row">
         <div class="col-md-4">
             {{form.code_pj|as_crispy_field}}
@@ -21,11 +22,11 @@ Form Peminjaman Barang
         </div>
         <div class="col-md-4">
             Tanggal Dipinjam
-            <input type="date" class="form-control" id="date" value="{{pinjam.date|date:'Y-m-d' }}">
+            <input type="date" class="form-control" id="date" value="{{form.tgl_balikin}}">
         </div>
         <div class="col-md-4">
             Tanggal Dikembalikan
-            <input type="date" class="form-control" id="date" value="{{pinjam.date|date:'Y-m-d' }}">
+            <input type="date" class="form-control" id="date" value="{{form.tgl_pinjam}}">
         </div>
     </div>
     <div class="row">

@@ -9,11 +9,12 @@ class BarangForm(forms.ModelForm):
 
     class Meta:
         model = Barang
-        fields = ('name', 'code', 'merk')
+        fields = ('name', 'code', 'merk','stok')
         labels = {
             'name': 'Nama',
             'code': 'Kode Barang',
-            'merk': 'Merk Barang'
+            'merk': 'Merk Barang',
+            'stok': 'Stok'
         }
 
     def __init__(self, *args, **kwargs):
@@ -73,21 +74,31 @@ class ServiceForm(forms.ModelForm):
 
 
 class CreateUserForm(UserCreationForm):
+    # password = forms.CharField(widget=forms.PasswordInput)
     class Meta:
         model = User
-        fields = ['username', 'email', 'password', 'password2']
+        fields = ['username', 'email', 'password1', 'password2','first_name','last_name']
+        labels = {
+            'username': 'Username',
+            'email': 'Email',
+            'password1': 'Password1',
+            'password2': 'password2',
+            'first_name': 'Nama Awal',
+            'last_name': 'Nama Akhir'
+        }
 
 
 class PinjamForm(forms.ModelForm):
     tgl_balikin = forms.DateField(input_formats=settings.DATE_INPUT_FORMATS)
     tgl_pinjam = forms.DateField(input_formats=settings.DATE_INPUT_FORMATS)
+    
 
     class Meta:
         model = Pinjam
-        fields = ('nama_pj', 'code_pj', 'merk_pj',
+        fields = ( 'nama_pj','code_pj', 'merk_pj',
                   'barang_pj', 'tgl_balikin', 'tgl_pinjam')
         labels = {
-            'nama_pj': 'Nama',
+            'nama_pj': 'NAMA ',
             'code_pj': 'Kode Barang',
             'merk_pj': 'Merk Barang',
             'barang_pj': 'Jenis Barang',

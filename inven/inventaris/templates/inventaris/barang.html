@@ -14,7 +14,9 @@ Tabel Barang
                 <th>Jenis Produk</th>
                 <th>Merk Produk</th>
                 <th>Jam</th>
+                <th>Stok</th>
                 <th>Barcode</th>
+                <th>Status</th>
                 <th>
                     <a href="{% url 'inventaris-insert' %}" class="btn btn-outline-success">
                         <i class="fas fa-plus"></i> Tambah Barang
@@ -31,7 +33,9 @@ Tabel Barang
                 <td>{{i.code}}</td>
                 <td>{{i.merk}}</td>
                 <td>{{i.date_created}}</td>
-                <td>{{i.barcode}}</td>
+                <td>{{i.stok}}</td>
+                <td><img src="../../{{i.barcode}}" width="300" height="200"><br>Nomor : {{i.barcodenum}}</td>
+                <td>{{i.status}}</td>
                 <!-- <td><img src="F:/Personal/Simrs/invenbaru/django/inven/static/images/a.png" width="150px" alt=""></td> -->
                 
                 <td>
