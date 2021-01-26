@@ -13,6 +13,7 @@ libusb==1.0.23b7
 mysql-connector-python==8.0.22
 mysqlclient==2.0.1
 Pillow==8.0.1
+psycopg2==2.8.6
 pygubu==0.10.3
 PyMySQL==0.10.1
 pyserial==3.5
