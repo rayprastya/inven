@@ -92,7 +92,9 @@ DATABASES = {
         'PASSWORD': 'b53a88af',
         'HOST': 'us-cdbr-east-03.cleardb.com',
         'PORT': '3306',
-        
+        'OPTIONS': {
+            'skip-ssl',
+       },
     }
 }
 import dj_database_url
