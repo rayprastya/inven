@@ -26,7 +26,7 @@ SECRET_KEY = 'a-y$v37z!8ktjm(7cn%m-qp)m!bj=nw^mbp=xmp#wtgyyeh8vy'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1']
+ALLOWED_HOSTS = ['rsinventaris.herokuapp.com','127.0.0.1']
 
 
 # Application definition
