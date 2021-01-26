@@ -23,8 +23,7 @@ def loginUser(request):
             password_inp = request.POST.get('password', False)
             # iduser = AuthUser.objects.raw('SELECT id FROM auth_user WHERE username = %s', [username_inp])
             user = authenticate(request, username=username_inp,
-                                password=password_inp,
-                                )
+                                password=password_inp)
 
             if user is not None:
                 login(request, user)
